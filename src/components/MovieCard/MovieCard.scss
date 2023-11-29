@@ -1,0 +1,45 @@
+.movie-card {
+  display: flex;
+  width: 450px;
+  height: 280px;
+  max-height: 100%;
+  background-color: #fff;
+  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.15);
+
+  &__img {
+    max-width: 182px;
+    max-height: 100%;
+    object-fit: cover;
+  }
+
+  &__about-text {
+    display: flex;
+    gap: 8px;
+    width: 268px;
+    height: 260px;
+    flex-direction: column;
+    padding: 10px 20px 50px;
+    overflow: hidden;
+  }
+
+  &__title {
+    font-size: 20px;
+    line-height: 28px;
+  }
+
+  &__release-date {
+    color: #827e7e;
+    font-size: 12px;
+    line-height: 22px;
+  }
+
+  &__overview {
+    font-size: 12px;
+    line-height: 22px;
+    max-height: 130px;
+  }
+
+  &__tag-list {
+    display: flex;
+  }
+}
