@@ -1,8 +1,18 @@
 .main {
   width: 1010px;
-  min-height: 940px;
+  min-height: 100vh;
   height: 100%;
   margin: 0 auto;
   padding: 22px 32px;
   background-color: #fff;
+
+  &__spin-container {
+    text-align: center;
+    margin-top: 50%;
+  }
+
+  &__error-message {
+    font-size: 18px;
+    text-align: center;
+  }
 }

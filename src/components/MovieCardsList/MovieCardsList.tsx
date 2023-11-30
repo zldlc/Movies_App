@@ -4,16 +4,16 @@ import MovieCard from '../MovieCard/MovieCard';
 
 import './MovieCardsList.scss';
 
-interface MovieCardsListProps {
+interface IMovieCardsListProps {
   movies: IMovie[];
 }
 
-const MovieCardsList: FC<MovieCardsListProps> = ({ movies }) => {
+const MovieCardsList: FC<IMovieCardsListProps> = ({ movies }) => {
   return (
     <ul className="movies-list list-reset">
       {movies.map((movie) => {
-        const { id } = movie;
-        return <MovieCard key={id} {...movie} />;
+        const { id, ...movieProps } = movie;
+        return <MovieCard key={id} {...movieProps} />;
       })}
     </ul>
   );
