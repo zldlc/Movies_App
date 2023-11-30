@@ -28,7 +28,7 @@ const App: FC = () => {
 
   const endLoading = isLoadingError ? (
     <Alert
-      message="Упс, при загрузке фильмов произошла ошибка! Попробуйте позже"
+      message="При загрузке фильмов произошла ошибка! Попробуйте позже"
       type="error"
       className="main__error-message"
     />
