@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+
 import { Spin } from 'antd';
 
 import './Spinner.scss';
@@ -6,7 +7,7 @@ import './Spinner.scss';
 const Spinner: FC = () => {
   return (
     <div className="main__spin-container">
-      <Spin tip="Loading..." size="large" className="main__spin spin">
+      <Spin size="large" className="main__spin spin">
         <div className="content" />
       </Spin>
     </div>

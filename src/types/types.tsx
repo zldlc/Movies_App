@@ -9,4 +9,5 @@ export interface IMovie {
 export interface IGettedMovies {
   page: number;
   results: IMovie[];
+  total_results: number;
 }
