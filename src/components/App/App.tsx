@@ -8,6 +8,7 @@ import { Offline } from 'react-detect-offline';
 import './App.scss';
 
 const App: FC = () => {
+
   return (
     <main className="main">
       <PagesTabs />
@@ -24,5 +25,4 @@ const App: FC = () => {
 
 export default App;
 
-// +Разнеси по файлам стилевой провайдер - +создать две страницы - +изменить текст ошибки без впн - добавить UI (звездочки)
-// Поменять ховер у pagination - сверстать круг для рейтинга - сделать уменьшение шрифта больших заголовков
+
