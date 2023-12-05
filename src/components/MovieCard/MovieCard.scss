@@ -16,10 +16,8 @@
   &__about-text {
     display: flex;
     gap: 8px;
-    width: 274px;
     height: 260px;
     flex-direction: column;
-    padding: 10px 20px 50px;
     overflow: hidden;
   }
 
@@ -42,5 +40,19 @@
 
   &__tag-list {
     display: flex;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px 20px 18px;
+    max-width: 274px;
+  }
+
+  &__rate {
+    display: flex;
+    transform: scale(0.85);
+    transform-origin: 0;
   }
 }

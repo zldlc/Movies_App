@@ -6,12 +6,6 @@
   padding: 22px 32px;
   background-color: #fff;
 
-  &__spin-container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-  }
-
   &__error-message {
     font-size: 18px;
     text-align: center;
@@ -50,5 +44,9 @@
 
   &__pagination {
     text-align: center;
+  }
+
+  &__spinner-wrapper {
+    height: 80vh;
   }
 }
