@@ -40,11 +40,12 @@ const SearchMoviesPage: FC = () => {
 
   const changeCurrentPage = (page: number) => {
     setCurrentPage(page);
+    window.scrollTo(0, 0);
   };
 
   const endLoading = isLoadingError ? (
     <Alert
-      message="При загрузке фильмов произошла ошибка! Проверьте подключение к VPN"
+      message="При загрузке фильмов произошла ошибка! Проверьте подключение к VPN и перезагрузите страницу"
       type="error"
       className="main__error-message"
     />

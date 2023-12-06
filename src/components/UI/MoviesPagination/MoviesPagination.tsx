@@ -20,6 +20,7 @@ const MoviesPagination: FC<IMoviesPaginationProps> = ({ totalResults, currentPag
             itemActiveBg: '#1890FF',
             lineWidth: 0,
             colorPrimary: '#FFF',
+            colorPrimaryHover: '#FFF',
           },
         },
       }}

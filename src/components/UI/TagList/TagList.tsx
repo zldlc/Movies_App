@@ -1,20 +1,36 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 
-import { Tag } from 'antd';
+import { GenresContext } from '../../GenresContext/GenresContext';
 
-const TagList: FC = () => {
+import { Tag, ConfigProvider } from 'antd';
+
+interface ITagListProps {
+  genres: number[];
+}
+
+const TagList: FC<ITagListProps> = ({ genres }) => {
+  const genresList = useContext(GenresContext);
   return (
-    <ul className="movie-card__tag-list tag-list list-reset">
-      <li className="tag-list__tag">
-        <Tag>Tag 1</Tag>
-      </li>
-      <li className="tag-list__tag">
-        <Tag>Tag 2</Tag>
-      </li>
-      <li className="tag-list__tag">
-        <Tag>Tag 3</Tag>
-      </li>
-    </ul>
+    <ConfigProvider
+      theme={{
+        components: {
+          Tag: {
+            marginXS: 0,
+          },
+        },
+      }}
+    >
+      <ul className="movie-card__tag-list tag-list list-reset">
+        {genres.map((id: number) => {
+          let currentGenre = genresList.find((genre) => genre.id === id);
+          return (
+            <li className="tag-list__tag" key={id}>
+              <Tag>{currentGenre ? currentGenre.name : 'Unknown'}</Tag>
+            </li>
+          );
+        })}
+      </ul>
+    </ConfigProvider>
   );
 };
 

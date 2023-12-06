@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { IGettedMovies } from '../types/types';
+import { IGettedMovies, IGettedGenres } from '../types/types';
 
 const _baseUrl: string = 'https://api.themoviedb.org/3';
 const _apiKey: string = 'api_key=5e92cf2d755d075cbaacc6780926a22c';
@@ -13,6 +13,12 @@ export default class MovieDbService {
         signal,
       }
     );
+
+    return promise.data;
+  }
+
+  async getGenres(): Promise<IGettedGenres> {
+    const promise = await axios.get<IGettedGenres>(`${_baseUrl}/genre/movie/list?${_apiKey}`);
 
     return promise.data;
   }
