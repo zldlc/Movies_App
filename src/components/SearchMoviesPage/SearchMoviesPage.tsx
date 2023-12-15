@@ -14,7 +14,11 @@ import { IMovie, IGettedMovies } from '../../types/types';
 
 const movieDbService = new MovieDbService();
 
-const SearchMoviesPage: FC = () => {
+interface ISearchMoviesProps {
+  onRatingClick: () => void;
+}
+
+const SearchMoviesPage: FC<ISearchMoviesProps> = ({ onRatingClick }) => {
   const [movieData, setMovieData] = useState<IMovie[]>([]);
   const [searchMovieValue, setSearchMovieValue] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -51,7 +55,7 @@ const SearchMoviesPage: FC = () => {
     />
   ) : (
     <div className="main__list-wrapper">
-      <MovieCardsList movies={movieData} />
+      <MovieCardsList movies={movieData} onRatingClick={onRatingClick} />
       <MoviesPagination
         totalResults={totalResults}
         currentPage={currentPage}

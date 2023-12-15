@@ -1,6 +1,6 @@
 import React, { FC, useContext } from 'react';
 
-import { GenresContext } from '../../GenresContext/GenresContext';
+import { GenresContext } from '../../Context/GenresContext';
 
 import { Tag, ConfigProvider } from 'antd';
 

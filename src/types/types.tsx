@@ -6,6 +6,7 @@ export interface IMovie {
   poster_path: string;
   vote_average: number;
   genre_ids: number[];
+  rating?: number;
 }
 
 export interface IGettedMovies {
@@ -21,4 +22,8 @@ export interface IGenre {
 
 export interface IGettedGenres {
   genres: IGenre[];
+}
+
+export interface ICreatedGuestSession {
+  guest_session_id: string;
 }

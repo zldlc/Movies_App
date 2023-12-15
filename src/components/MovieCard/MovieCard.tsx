@@ -1,33 +1,23 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 
 import cutText from '../../utility/cutText';
 import decreaseTitle from '../../utility/decreaseTitle';
 import checkRatingColorClass from '../../utility/checkRatingColorClass';
 import TagList from '../UI/TagList/TagList';
+import MovieRate from '../UI/MovieRate/MovieRate';
+import { MovieContext } from '../Context/MovieProvider';
 
 import { format } from 'date-fns';
 
 import './MovieCard.scss';
 import noImage from './img/no-image.png';
-import MovieRate from '../UI/MovieRate/MovieRate';
 
 interface IMovieProps {
-  original_title: string;
-  overview: string;
-  release_date: string;
-  poster_path: string;
-  vote_average: number;
-  genre_ids: number[];
+  onRatingClick: () => void;
 }
 
-const MovieCard: FC<IMovieProps> = ({
-  original_title,
-  overview,
-  release_date,
-  poster_path,
-  vote_average,
-  genre_ids,
-}) => {
+const MovieCard: FC<IMovieProps> = ({ onRatingClick }) => {
+  const { poster_path, release_date, overview, vote_average, original_title, genre_ids } = useContext(MovieContext);
   const poster: string = poster_path ? `https://image.tmdb.org/t/p/w500/${poster_path}` : noImage;
   const formattedReleaseDate: string = release_date ? format(new Date(release_date), 'MMMM dd, yyyy') : 'Unknown date';
   const cuttedText: string = cutText(overview);
@@ -54,7 +44,7 @@ const MovieCard: FC<IMovieProps> = ({
           {genre_ids.length !== 0 ? <TagList genres={genre_ids} /> : null}
           <p className="movie-card__overview">{overview ? cuttedText : 'No overview'}</p>
         </div>
-        <MovieRate />
+        <MovieRate onRatingClick={onRatingClick} />
       </div>
     </li>
   );

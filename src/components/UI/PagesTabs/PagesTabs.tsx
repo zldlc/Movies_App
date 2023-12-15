@@ -1,11 +1,15 @@
 import React, { FC } from 'react';
 
 import SearchMoviesPage from '../../SearchMoviesPage/SearchMoviesPage';
-
-import { Tabs, ConfigProvider } from 'antd';
 import RatedMoviesPage from '../../RatedMoviesPage/RatedMoviesPage';
 
-const PagesTabs: FC = () => {
+import { Tabs, ConfigProvider } from 'antd';
+
+interface IPagesTabsProps {
+  onRatingClick: () => void;
+}
+
+const PagesTabs: FC<IPagesTabsProps> = ({ onRatingClick }) => {
   return (
     <ConfigProvider
       theme={{
@@ -24,12 +28,12 @@ const PagesTabs: FC = () => {
           {
             key: '1',
             label: 'Search',
-            children: <SearchMoviesPage />,
+            children: <SearchMoviesPage onRatingClick={onRatingClick} />,
           },
           {
             key: '2',
             label: 'Rated',
-            children: <RatedMoviesPage />,
+            children: <RatedMoviesPage onRatingClick={onRatingClick} />,
           },
         ]}
       />
