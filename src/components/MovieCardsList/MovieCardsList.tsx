@@ -1,17 +1,18 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
+import { MovieProvider } from '../Context/MovieProvider';
+import { AppContext } from '../Context/AppContext';
 
 import MovieCard from '../MovieCard/MovieCard';
 import { IMovie } from '../../types/types';
-import { MovieProvider } from '../Context/MovieProvider';
 
 import './MovieCardsList.scss';
 
 interface IMovieCardsListProps {
   movies: IMovie[];
-  onRatingClick: () => void;
 }
 
-const MovieCardsList: FC<IMovieCardsListProps> = ({ movies, onRatingClick }) => {
+const MovieCardsList: FC<IMovieCardsListProps> = ({ movies }) => {
+  const { onRatingClick } = useContext(AppContext);
   return (
     <ul className="movies-list list-reset">
       {movies.length === 0 ? (
@@ -20,7 +21,7 @@ const MovieCardsList: FC<IMovieCardsListProps> = ({ movies, onRatingClick }) => 
         movies.map((movie) => {
           return (
             <MovieProvider value={movie} key={movie.id}>
-              <MovieCard onRatingClick={onRatingClick} />
+              <MovieCard onRatingClick={(rating: number) => onRatingClick(movie.id, rating)} />
             </MovieProvider>
           );
         })

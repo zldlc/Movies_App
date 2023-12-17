@@ -1,31 +1,24 @@
-import React, { FC, useState, useContext } from 'react';
-
-import MovieDbService from '../../../services/moviedb-service';
+import React, { FC, useContext } from 'react';
 import { MovieContext } from '../../Context/MovieProvider';
 
 import { Rate } from 'antd';
 
-const movieDbService = new MovieDbService();
-
 interface IMovieRateProps {
-  onRatingClick: () => void;
+  onRatingClick: (rating: number) => void;
 }
 
 const MovieRate: FC<IMovieRateProps> = ({ onRatingClick }) => {
   const movie = useContext(MovieContext);
-  const [rating, setRating] = useState<number>(movie.rating ? movie.rating : 0);
 
-  const changeRating = async (value: number): Promise<void> => {
-    setRating(value);
-    await movieDbService.addRating(movie.id, value);
-    onRatingClick();
+  const changeRating = (value: number): void => {
+    onRatingClick(value);
   };
 
   return (
     <Rate
       count={10}
       allowHalf={true}
-      value={rating}
+      value={movie.rating}
       allowClear={false}
       className="movie-card__rate"
       onChange={changeRating}

@@ -24,6 +24,15 @@ export interface IGettedGenres {
   genres: IGenre[];
 }
 
-export interface ICreatedGuestSession {
-  guest_session_id: string;
+export interface IAppContext {
+  ratedMovies: IMovie[];
+  movieData: IMovie[];
+  ratedTotalResults: number;
+  searchTotalResults: number;
+  isLoading: boolean;
+  isLoadingError: boolean;
+  currentSearchPage: number;
+  changeCurrentPage: (currentPage: number) => void;
+  onRatingClick: (id: number, rating: number) => void;
+  onChangeSearchInput: (value: string) => void;
 }

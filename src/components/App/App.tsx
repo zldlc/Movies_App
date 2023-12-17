@@ -1,37 +1,33 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useFetching } from '../../hooks/useFetching';
+import { GenresProvider } from '../Context/GenresContext';
+import { AppProvider } from '../Context/AppContext';
 
 import PagesTabs from '../UI/PagesTabs/PagesTabs';
 import MovieDbService from '../../services/moviedb-service';
-import { GenresProvider } from '../Context/GenresContext';
-import { RatedMoviesProvider } from '../Context/RatedMoviesContext';
 
 import { Alert } from 'antd';
 import { Offline } from 'react-detect-offline';
 
-import { IGenre, IGettedGenres, ICreatedGuestSession, IMovie, IGettedMovies } from '../../types/types';
+import { IGenre, IGettedGenres, IMovie, IGettedMovies } from '../../types/types';
 
 import './App.scss';
 
 const movieDbService = new MovieDbService();
 
 const App: FC = () => {
-  const [genresList, setGenresList] = useState<IGenre[]>([]);
+  const [movieData, setMovieData] = useState<IMovie[]>([]);
+  const [searchMovieValue, setSearchMovieValue] = useState<string>('');
+  const [searchTotalResults, setSearchTotalResults] = useState<number>(0);
+  const [currentSearchPage, setCurrentSearchPage] = useState<number>(1);
   const [ratedMovies, setRatedMovies] = useState<IMovie[]>([]);
-  const [totalResults, setTotalResults] = useState<number>(1);
-  const [isRatingClick, setIsRatingClick] = useState<boolean>(false);
+  const [ratedTotalResults, setRatedTotalResults] = useState<number>(1);
+  const [genresList, setGenresList] = useState<IGenre[]>([]);
+  const [searchMovies, isLoading, isLoadingError] = useFetching(async (signal) => {
+    const responseData: IGettedMovies = await movieDbService.getMovies(searchMovieValue, signal, currentSearchPage);
 
-  const [getGuestSession] = useFetching(async () => {
-    const response: ICreatedGuestSession = await movieDbService.getGuestSession();
-
-    sessionStorage.setItem('guestSessionID', response.guest_session_id);
-  });
-
-  const [getRatedMovies] = useFetching(async () => {
-    const response: IGettedMovies = await movieDbService.getRatedMovies();
-
-    setRatedMovies(response.results);
-    setTotalResults(response.total_results);
+    setMovieData(responseData.results);
+    setSearchTotalResults(responseData.total_results);
   });
 
   const [getGenres] = useFetching(async () => {
@@ -41,21 +37,71 @@ const App: FC = () => {
   });
 
   useEffect(() => {
-    getGuestSession();
+    const controller: AbortController = new AbortController();
+    const signal: AbortSignal = controller.signal;
+
+    searchMovies(signal);
+
+    return () => {
+      controller.abort();
+    };
+    // eslint-disable-next-line
+  }, [searchMovieValue, currentSearchPage]);
+
+  useEffect(() => {
     getGenres();
+    setRatedMovies(JSON.parse(localStorage.getItem('ratedMovies') || '[]'));
+    setRatedTotalResults(JSON.parse(localStorage.getItem('ratedMovies') || '[]').length);
     // eslint-disable-next-line
   }, []);
 
-  useEffect(() => {
-    getRatedMovies();
-    // eslint-disable-next-line
-  }, [isRatingClick]);
+  const changeCurrentPage = (currentPage: number): void => {
+    setCurrentSearchPage(currentPage);
+    window.scrollTo(0, 0);
+  };
+
+  const onRatingClick = (id: number, rating: number): void => {
+    const copyArr = structuredClone(movieData);
+    const index = copyArr.findIndex((movie: IMovie) => movie.id === id);
+
+    const currentRatedMovies: IMovie[] = JSON.parse(localStorage.getItem('ratedMovies') || '[]');
+
+    const isCurrentRatedMovies = currentRatedMovies.findIndex((movie: IMovie) => movie.id === id);
+
+    if (isCurrentRatedMovies === -1) {
+      currentRatedMovies.push({ ...copyArr[index], rating });
+      setRatedTotalResults(currentRatedMovies.length);
+    } else {
+      currentRatedMovies[isCurrentRatedMovies] = { ...currentRatedMovies[isCurrentRatedMovies], rating };
+    }
+
+    localStorage.setItem('ratedMovies', JSON.stringify(currentRatedMovies));
+    setRatedMovies(JSON.parse(localStorage.getItem('ratedMovies') || '[]'));
+  };
+
+  const onChangeSearchInput = (value: string) => {
+    setSearchMovieValue(value);
+    setCurrentSearchPage(1);
+  };
+
+  const appContextValue = {
+    movieData,
+    ratedMovies,
+    ratedTotalResults,
+    searchTotalResults,
+    isLoading,
+    isLoadingError,
+    currentSearchPage,
+    changeCurrentPage,
+    onRatingClick,
+    onChangeSearchInput,
+  };
 
   return (
-    <RatedMoviesProvider value={{ ratedMovies, totalResults }}>
+    <AppProvider value={appContextValue}>
       <main className="main">
         <GenresProvider value={genresList}>
-          <PagesTabs onRatingClick={() => setIsRatingClick(!isRatingClick)} />
+          <PagesTabs />
         </GenresProvider>
         <Offline>
           <Alert
@@ -65,7 +111,7 @@ const App: FC = () => {
           />
         </Offline>
       </main>
-    </RatedMoviesProvider>
+    </AppProvider>
   );
 };
 

@@ -1,4 +1,5 @@
 .movie-card {
+  position: relative;
   display: flex;
   width: 455px;
   height: 280px;
@@ -7,10 +8,30 @@
   box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.15);
   justify-content: space-between;
 
+  @media (max-width: 420px) {
+    width: 100%;
+    height: 245px;
+    padding: 10px;
+  }
+
   &__img {
     max-width: 182px;
     max-height: 100%;
     object-fit: cover;
+
+    @media (max-width: 420px) {
+      display: none;
+      width: 60px;
+      height: 90px;
+    }
+
+    &--about-text {
+      display: none;
+
+      @media (max-width: 420px) {
+        display: block;
+      }
+    }
   }
 
   &__about-text {
@@ -19,6 +40,21 @@
     height: 260px;
     flex-direction: column;
     overflow: hidden;
+
+    @media (max-width: 420px) {
+      flex-direction: column;
+    }
+  }
+
+  &__about-text-header {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__content-header {
+    display: flex;
+    gap: 14px;
   }
 
   &__title {
@@ -51,18 +87,27 @@
   }
 
   &__content {
-    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     padding: 10px 20px 18px;
     max-width: 274px;
+
+    @media (max-width: 420px) {
+      padding: 0;
+      max-width: none;
+    }
   }
 
   &__rate {
     display: flex;
     transform: scale(0.85);
     transform-origin: 0;
+
+    @media (max-width: 420px) {
+      align-self: flex-end;
+      transform: scale(1);
+    }
   }
 
   &__movie-rating {

@@ -5,9 +5,18 @@
   height: 100%;
   gap: 36px;
   margin-bottom: 36px;
+
+  @media (max-width: 420px) {
+    gap: 20px;
+    margin-bottom: 20px;
+  }
 }
 
 .not-found-text {
   font-size: 24px;
   margin: 0 auto;
+
+  @media (max-width: 420px) {
+    text-align: center;
+  }
 }

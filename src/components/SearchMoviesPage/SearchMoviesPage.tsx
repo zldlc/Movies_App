@@ -1,7 +1,6 @@
-import React, { useEffect, FC, useState } from 'react';
-import { useFetching } from '../../hooks/useFetching';
+import React, { FC, useContext } from 'react';
+import { AppContext } from '../Context/AppContext';
 
-import MovieDbService from '../../services/moviedb-service';
 import MovieCardsList from '../MovieCardsList/MovieCardsList';
 import MovieSearchForm from '../MovieSearchForm/MovieSearchForm';
 import Spinner from '../UI/Spinner/Spinner';
@@ -10,42 +9,19 @@ import MoviesPagination from '../UI/MoviesPagination/MoviesPagination';
 import { Alert } from 'antd';
 import { debounce } from 'lodash';
 
-import { IMovie, IGettedMovies } from '../../types/types';
+import { IMovie } from '../../types/types';
 
-const movieDbService = new MovieDbService();
-
-interface ISearchMoviesProps {
-  onRatingClick: () => void;
-}
-
-const SearchMoviesPage: FC<ISearchMoviesProps> = ({ onRatingClick }) => {
-  const [movieData, setMovieData] = useState<IMovie[]>([]);
-  const [searchMovieValue, setSearchMovieValue] = useState<string>('');
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [totalResults, setTotalResults] = useState<number>(0);
-  const [searchMovies, isMoviesLoading, isLoadingError] = useFetching(async (signal) => {
-    const responseData: IGettedMovies = await movieDbService.getMovies(searchMovieValue, signal, currentPage);
-
-    setMovieData(responseData.results);
-    setTotalResults(responseData.total_results);
-  });
-
-  useEffect(() => {
-    const controller: AbortController = new AbortController();
-    const signal: AbortSignal = controller.signal;
-
-    searchMovies(signal);
-
-    return () => {
-      controller.abort();
-    };
-    // eslint-disable-next-line
-  }, [searchMovieValue, currentPage]);
-
-  const changeCurrentPage = (page: number) => {
-    setCurrentPage(page);
-    window.scrollTo(0, 0);
-  };
+const SearchMoviesPage: FC = () => {
+  const {
+    movieData,
+    ratedMovies,
+    searchTotalResults,
+    isLoading,
+    isLoadingError,
+    currentSearchPage,
+    changeCurrentPage,
+    onChangeSearchInput,
+  } = useContext(AppContext);
 
   const endLoading = isLoadingError ? (
     <Alert
@@ -55,11 +31,16 @@ const SearchMoviesPage: FC<ISearchMoviesProps> = ({ onRatingClick }) => {
     />
   ) : (
     <div className="main__list-wrapper">
-      <MovieCardsList movies={movieData} onRatingClick={onRatingClick} />
+      <MovieCardsList
+        movies={movieData.map((movie: IMovie) => {
+          const ratedMovie = ratedMovies.findIndex((rated) => rated.id === movie.id);
+          return ratedMovie < 0 ? movie : ratedMovies[ratedMovie];
+        })}
+      />
       <MoviesPagination
-        totalResults={totalResults}
-        currentPage={currentPage}
-        changeCurrentPage={changeCurrentPage}
+        totalResults={searchTotalResults}
+        currentPage={currentSearchPage}
+        changeCurrentPage={(page: number) => changeCurrentPage(page)}
         movieData={movieData}
       />
     </div>
@@ -68,12 +49,11 @@ const SearchMoviesPage: FC<ISearchMoviesProps> = ({ onRatingClick }) => {
   return (
     <div>
       <MovieSearchForm
-        searchMovies={debounce((value) => {
-          setSearchMovieValue(value);
-          setCurrentPage(1);
+        searchMovies={debounce((value: string) => {
+          onChangeSearchInput(value);
         }, 700)}
       />
-      {isMoviesLoading ? <Spinner /> : endLoading}
+      {isLoading ? <Spinner /> : endLoading}
     </div>
   );
 };

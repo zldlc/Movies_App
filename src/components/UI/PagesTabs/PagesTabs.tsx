@@ -5,11 +5,7 @@ import RatedMoviesPage from '../../RatedMoviesPage/RatedMoviesPage';
 
 import { Tabs, ConfigProvider } from 'antd';
 
-interface IPagesTabsProps {
-  onRatingClick: () => void;
-}
-
-const PagesTabs: FC<IPagesTabsProps> = ({ onRatingClick }) => {
+const PagesTabs: FC = () => {
   return (
     <ConfigProvider
       theme={{
@@ -28,12 +24,12 @@ const PagesTabs: FC<IPagesTabsProps> = ({ onRatingClick }) => {
           {
             key: '1',
             label: 'Search',
-            children: <SearchMoviesPage onRatingClick={onRatingClick} />,
+            children: <SearchMoviesPage />,
           },
           {
             key: '2',
             label: 'Rated',
-            children: <RatedMoviesPage onRatingClick={onRatingClick} />,
+            children: <RatedMoviesPage />,
           },
         ]}
       />
